@@ -4,10 +4,7 @@ plugins {
   alias(libs.plugins.google.devtools.ksp)
   alias(libs.plugins.roborazzi)
   alias(libs.plugins.secrets)
-<<<<<<< HEAD
   alias(libs.plugins.google.services)
-=======
->>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
 }
 
 android {
@@ -33,10 +30,7 @@ android {
       keyPassword = System.getenv("KEY_PASSWORD")
     }
     create("debugConfig") {
-      storeFile = file("${rootDir}/debug.keystore")
-      storePassword = "android"
-      keyAlias = "androiddebugkey"
-      keyPassword = "android"
+      // Use default debug keystore by not specifying one, or let it fallback
     }
   }
 
@@ -49,7 +43,7 @@ android {
       signingConfig = signingConfigs.getByName("release")
     }
     debug {
-      signingConfig = signingConfigs.getByName("debugConfig")
+      // No specific signing config needed for default debug
     }
   }
   compileOptions {
@@ -100,6 +94,8 @@ dependencies {
   implementation(libs.firebase.ai)
   implementation(libs.firebase.firestore)
   implementation(libs.firebase.auth)
+  implementation(libs.google.play.services.auth)
+  implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.10.1")
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.logging.interceptor)
@@ -107,10 +103,7 @@ dependencies {
   implementation(libs.okhttp)
   // implementation(libs.play.services.location)
   implementation(libs.retrofit)
-<<<<<<< HEAD
   implementation("androidx.browser:browser:1.8.0")
-=======
->>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
   testImplementation(libs.androidx.compose.ui.test.junit4)
   testImplementation(libs.androidx.core)
   testImplementation(libs.androidx.junit)

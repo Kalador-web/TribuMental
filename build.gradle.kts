@@ -5,8 +5,5 @@ plugins {
   alias(libs.plugins.google.devtools.ksp) apply false
   alias(libs.plugins.roborazzi) apply false
   alias(libs.plugins.secrets) apply false
-<<<<<<< HEAD
   alias(libs.plugins.google.services) apply false
-=======
->>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
 }

@@ -40,10 +40,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import android.graphics.Bitmap
+import android.util.Log
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.compose.ui.graphics.asImageBitmap
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.example.data.model.Appointment
 import com.example.data.model.MedicalDocument
 import com.example.data.model.MoodCheckIn
@@ -1273,8 +1277,38 @@ fun AuthScreen(
 
     var showGooglePicker by remember { mutableStateOf(false) }
     var googleConnecting by remember { mutableStateOf(false) }
-    var googleSelectedAccount by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)
+            val idToken = account.idToken
+            if (idToken != null) {
+                googleConnecting = true
+                coroutineScope.launch {
+                    com.example.services.FirebaseAuthService.signInWithGoogle(idToken) { success, errorMsg ->
+                        if (success) {
+                            viewModel.loginGoogleUser(account.email ?: "", account.displayName ?: "") { isAlreadyOnboarded ->
+                                googleConnecting = false
+                                onAuthSuccess(account.email ?: "", isAlreadyOnboarded)
+                            }
+                        } else {
+                            googleConnecting = false
+                            errorMessage = errorMsg ?: "Error de autenticación con Google"
+                        }
+                    }
+                }
+            }
+        } catch (e: ApiException) {
+            googleConnecting = false
+            Log.e("AuthScreen", "Google sign in failed", e)
+            errorMessage = "Cancelado o error de conexión con Google"
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -1489,7 +1523,13 @@ fun AuthScreen(
 
                     OutlinedButton(
                         onClick = {
-                            showGooglePicker = true
+                            val webClientId = context.getString(context.resources.getIdentifier("default_web_client_id", "string", context.packageName))
+                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestIdToken(webClientId)
+                                .requestEmail()
+                                .build()
+                            val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                            googleSignInLauncher.launch(googleSignInClient.signInIntent)
                         },
                         border = BorderStroke(1.dp, SoftBorderPlum),
                         colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White),
@@ -1571,141 +1611,13 @@ fun AuthScreen(
             )
         }
 
-        if (showGooglePicker) {
-            androidx.compose.ui.window.Dialog(
-                onDismissRequest = { if (!googleConnecting) showGooglePicker = false }
-            ) {
-                Card(
-                    shape = RoundedCornerShape(28.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    border = BorderStroke(1.dp, Color(0xFFDADCE0)),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .testTag("google_account_picker_dialog")
-                ) {
-                    Column(
-                        modifier = Modifier.padding(24.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Google",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 24.sp,
-                            fontFamily = FontFamily.SansSerif,
-                            color = Color(0xFF4285F4),
-                            letterSpacing = (-0.5).sp,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-                        
-                        Text(
-                            text = "Elegir una cuenta",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = DeepCharcoalText
-                        )
-                        
-                        Text(
-                            text = "para continuar a TribuMental",
-                            fontSize = 12.sp,
-                            color = MutedSlateSub,
-                            modifier = Modifier.padding(bottom = 16.dp)
-                        )
-
-                        if (googleConnecting) {
-                            Spacer(modifier = Modifier.height(16.dp))
-                            CircularProgressIndicator(
-                                color = Color(0xFF4285F4),
-                                modifier = Modifier.size(36.dp),
-                                strokeWidth = 3.dp
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "Accediendo con la cuenta de Google...",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = PrimaryDeepPurple,
-                                textAlign = TextAlign.Center
-                            )
-                        } else {
-                            AccountItemRow(
-                                name = "Cristian Mosquera",
-                                email = "cristianmosquera.fhco@gmail.com",
-                                avatarColor = Color(0xFFE2F0D9),
-                                avatarText = "C",
-                                onClick = {
-                                    googleConnecting = true
-                                    googleSelectedAccount = "cristianmosquera.fhco@gmail.com"
-                                    simulateAuthConnection {
-                                        viewModel.loginGoogleUser("cristianmosquera.fhco@gmail.com", "Cristian Mosquera") { isAlreadyOnboarded ->
-                                            googleConnecting = false
-                                            showGooglePicker = false
-                                            onAuthSuccess("cristianmosquera.fhco@gmail.com", isAlreadyOnboarded)
-                                        }
-                                    }
-                                }
-                            )
-
-                            Divider(color = Color(0xFFF1F3F4), thickness = 1.dp)
-
-                            AccountItemRow(
-                                name = "Camila Silva (Tribu Mamá)",
-                                email = "mama.tribu@gmail.com",
-                                avatarColor = Color(0xFFFCE4D6),
-                                avatarText = "C",
-                                onClick = {
-                                    googleConnecting = true
-                                    googleSelectedAccount = "mama.tribu@gmail.com"
-                                    simulateAuthConnection {
-                                        viewModel.loginGoogleUser("mama.tribu@gmail.com", "Camila Silva") { isAlreadyOnboarded ->
-                                            googleConnecting = false
-                                            showGooglePicker = false
-                                            onAuthSuccess("mama.tribu@gmail.com", isAlreadyOnboarded)
-                                        }
-                                    }
-                                }
-                            )
-
-                            Divider(color = Color(0xFFF1F3F4), thickness = 1.dp)
-
-                            AccountItemRow(
-                                name = "Invitada Tribu",
-                                email = "invitada.tribu@gmail.com",
-                                avatarColor = Color(0xFFFFF2CC),
-                                avatarText = "I",
-                                onClick = {
-                                    googleConnecting = true
-                                    googleSelectedAccount = "invitada.tribu@gmail.com"
-                                    simulateAuthConnection {
-                                        viewModel.loginGoogleUser("invitada.tribu@gmail.com", "Invitada Tribu") { isAlreadyOnboarded ->
-                                            googleConnecting = false
-                                            showGooglePicker = false
-                                            onAuthSuccess("invitada.tribu@gmail.com", isAlreadyOnboarded)
-                                        }
-                                    }
-                                }
-                            )
-
-                            Spacer(modifier = Modifier.height(16.dp))
-
-                            Text(
-                                text = "Para continuar, Google compartirá tu nombre, correo electrónico, foto de perfil y preferencia de idioma con TribuMental. Consulta la Política de Privacidad.",
-                                fontSize = 9.sp,
-                                color = MutedSlateSub,
-                                lineHeight = 12.sp,
-                                textAlign = TextAlign.Start
-                            )
-                            
-                            Spacer(modifier = Modifier.height(8.dp))
-                            
-                            TextButton(
-                                onClick = { showGooglePicker = false },
-                                modifier = Modifier.align(Alignment.End)
-                            ) {
-                                Text("Cancelar", color = Color(0xFF5F6368), fontWeight = FontWeight.Bold)
-                            }
-                        }
+        if (googleConnecting) {
+            androidx.compose.ui.window.Dialog(onDismissRequest = {}) {
+                Card(shape = RoundedCornerShape(16.dp)) {
+                    Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        CircularProgressIndicator(color = PrimaryDeepPurple)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text("Conectando con Google...")
                     }
                 }
             }

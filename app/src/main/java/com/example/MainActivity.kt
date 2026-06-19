@@ -62,7 +62,6 @@ class MainActivity : ComponentActivity() {
         }
         val profileState by mainViewModel.userProfile.collectAsStateWithLifecycle()
         val isAuthLoading by mainViewModel.isAuthLoading.collectAsStateWithLifecycle()
-        val isSyncing by com.example.services.FirebaseSyncService.isSyncing.collectAsStateWithLifecycle()
         val activeWompiPlan by mainViewModel.activeWompiPaymentPlan.collectAsStateWithLifecycle()
         val isBreathingActive by mainViewModel.isBreathingActive.collectAsStateWithLifecycle()
 
@@ -230,8 +229,8 @@ class MainActivity : ComponentActivity() {
             }
           }
 
-          // Global loading spinner overlay for Authentication and Firestore Realtime Sync
-          if (isAuthLoading || isSyncing) {
+          // Global loading spinner overlay for Authentication
+          if (isAuthLoading) {
             Box(
               modifier = Modifier
                 .fillMaxSize()
@@ -262,7 +261,7 @@ class MainActivity : ComponentActivity() {
                   )
                   Spacer(modifier = Modifier.height(20.dp))
                   Text(
-                    text = if (isAuthLoading) "Autenticando..." else "Sincronizando...",
+                    text = "Autenticando...",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -271,7 +270,7 @@ class MainActivity : ComponentActivity() {
                   )
                   Spacer(modifier = Modifier.height(8.dp))
                   Text(
-                    text = if (isAuthLoading) "Estamos validando tus credenciales con Firebase de forma segura." else "Tu perfil y registros se están guardando de forma encriptada en Firestore.",
+                    text = "Estamos validando tus credenciales de forma segura.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = androidx.compose.ui.text.style.TextAlign.Center,

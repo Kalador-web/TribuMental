@@ -61,7 +61,26 @@ object FirebaseAuthService {
     }
 
     /**
-     * Integrates Google accounts with Firebase Auth securely.
+     * Integrates real Google Sign-In with Firebase Auth.
+     */
+    suspend fun signInWithGoogle(
+        idToken: String,
+        onComplete: (success: Boolean, errorMsg: String?) -> Unit
+    ) = withContext(Dispatchers.Main) {
+        val firebaseAuth = auth ?: return@withContext onComplete(false, "Firebase no listo")
+        
+        val credential = com.google.firebase.auth.GoogleAuthProvider.getCredential(idToken, null)
+        firebaseAuth.signInWithCredential(credential)
+            .addOnSuccessListener {
+                onComplete(true, null)
+            }
+            .addOnFailureListener { e ->
+                onComplete(false, e.localizedMessage)
+            }
+    }
+
+    /**
+     * Integrates Google accounts with Firebase Auth securely (Legacy/Simulated).
      * When a simulated/real Google login occurs, we enroll or sign them in
      * using Firebase Authentication, creating a full real session.
      */
