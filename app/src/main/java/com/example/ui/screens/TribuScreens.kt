@@ -1289,15 +1289,18 @@ fun AuthScreen(
             val idToken = account.idToken
             if (idToken != null) {
                 googleConnecting = true
+                viewModel.setAuthLoading(true)
                 coroutineScope.launch {
                     com.example.services.FirebaseAuthService.signInWithGoogle(idToken) { success, errorMsg ->
                         if (success) {
                             viewModel.loginGoogleUser(account.email ?: "", account.displayName ?: "") { isAlreadyOnboarded ->
                                 googleConnecting = false
+                                viewModel.setAuthLoading(false)
                                 onAuthSuccess(account.email ?: "", isAlreadyOnboarded)
                             }
                         } else {
                             googleConnecting = false
+                            viewModel.setAuthLoading(false)
                             errorMessage = errorMsg ?: "Error de autenticación con Google"
                         }
                     }
@@ -1523,6 +1526,17 @@ fun AuthScreen(
 
                     OutlinedButton(
                         onClick = {
+                            errorMessage = ""
+                            // Fail-safe: if after 20s nothing happens, reset loading
+                            coroutineScope.launch {
+                                delay(20000)
+                                if (googleConnecting) {
+                                    googleConnecting = false
+                                    viewModel.setAuthLoading(false)
+                                    errorMessage = "La conexión con Google está tardando demasiado. Reintenta."
+                                }
+                            }
+
                             try {
                                 val resId = context.resources.getIdentifier("default_web_client_id", "string", context.packageName)
                                 if (resId != 0) {

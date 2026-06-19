@@ -5,7 +5,9 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.security.MessageDigest
 
 object FirebaseAuthService {
@@ -62,6 +64,7 @@ object FirebaseAuthService {
 
     /**
      * Integrates real Google Sign-In with Firebase Auth.
+     * Includes a timeout to prevent infinite loading.
      */
     suspend fun signInWithGoogle(
         idToken: String,
@@ -69,14 +72,21 @@ object FirebaseAuthService {
     ) = withContext(Dispatchers.Main) {
         val firebaseAuth = auth ?: return@withContext onComplete(false, "Firebase no listo")
         
-        val credential = com.google.firebase.auth.GoogleAuthProvider.getCredential(idToken, null)
-        firebaseAuth.signInWithCredential(credential)
-            .addOnSuccessListener {
-                onComplete(true, null)
-            }
-            .addOnFailureListener { e ->
-                onComplete(false, e.localizedMessage)
-            }
+        try {
+            val credential = com.google.firebase.auth.GoogleAuthProvider.getCredential(idToken, null)
+            
+            // Coroutine-friendly sign-in with 15s timeout
+            withContext(Dispatchers.IO) {
+                withTimeoutOrNull(15000) {
+                    firebaseAuth.signInWithCredential(credential).await()
+                }
+            } ?: throw Exception("Tiempo de espera agotado al conectar con Firebase")
+
+            onComplete(true, null)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error in signInWithGoogle: ${e.message}")
+            onComplete(false, e.localizedMessage ?: "Error de conexión")
+        }
     }
 
     /**

@@ -396,28 +396,21 @@ class TribuMentalViewModel(private val repository: AppRepository) : ViewModel() 
      */
     fun loginGoogleUser(email: String, name: String, onFinished: (Boolean) -> Unit) {
         viewModelScope.launch {
-            com.example.services.FirebaseAuthService.loginOrRegisterGoogleInFirebase(email, name) { success, errorMsg ->
-                viewModelScope.launch {
-                    val existing = repository.getProfileSync()
-                    if (existing != null && existing.email == email && existing.isOnboarded) {
-                        onFinished(true)
-                    } else {
-                        val newProfile = existing?.copy(
-                            name = if (name.isNotBlank()) name else (existing.name),
-                            email = email,
-                            isGoogleLinked = true
-                        ) ?: UserProfile(
-                            id = 1,
-                            name = name,
-                            email = email,
-                            isGoogleLinked = true,
-                            isOnboarded = false
-                        )
-                        repository.saveProfile(newProfile)
-                        onFinished(newProfile.isOnboarded)
-                    }
-                }
-            }
+            // Standardizing profile update logic without blocking UI
+            val existing = repository.getProfileSync()
+            val newProfile = existing?.copy(
+                name = if (name.isNotBlank()) name else (existing.name),
+                email = email,
+                isGoogleLinked = true
+            ) ?: UserProfile(
+                id = 1,
+                name = name,
+                email = email,
+                isGoogleLinked = true,
+                isOnboarded = false
+            )
+            repository.saveProfile(newProfile)
+            onFinished(newProfile.isOnboarded)
         }
     }
 
