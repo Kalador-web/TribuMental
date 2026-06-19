@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Group for the central cherry blossom structure -->
+    <!-- 5 Rotated Petals to form a symmetrical highly delicate cherry blossom flower -->
+    <group android:name="petal_0" android:pivotX="54" android:pivotY="54" android:rotation="0">
+        <path
+            android:strokeColor="#E295A5"
+            android:strokeWidth="0.8"
+            android:strokeLineJoin="round"
+            android:pathData="M 54,54 C 42,39 45,24 45,24 C 45,24 50,29 54,29 C 58,29 63,24 63,24 C 63,24 66,39 54,54 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="54"
+                    android:startY="54"
+                    android:endX="54"
+                    android:endY="24"
+                    android:type="linear">
+                    <item android:offset="0" android:color="#FFFAFB" /> <!-- Softest pearlescent pink -->
+                    <item android:offset="0.6" android:color="#FFE1E5" /> <!-- Creamy blossom pink -->
+                    <item android:offset="1" android:color="#FFAFC0" /> <!-- Tender cherry blossom pink -->
+                </gradient>
+            </aapt:attr>
+        </path>
+    </group>
+
+    <group android:name="petal_1" android:pivotX="54" android:pivotY="54" android:rotation="72">
+        <path
+            android:strokeColor="#E295A5"
+            android:strokeWidth="0.8"
+            android:strokeLineJoin="round"
+            android:pathData="M 54,54 C 42,39 45,24 45,24 C 45,24 50,29 54,29 C 58,29 63,24 63,24 C 63,24 66,39 54,54 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="54"
+                    android:startY="54"
+                    android:endX="54"
+                    android:endY="24"
+                    android:type="linear">
+                    <item android:offset="0" android:color="#FFFAFB" />
+                    <item android:offset="0.6" android:color="#FFE1E5" />
+                    <item android:offset="1" android:color="#FFAFC0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+    </group>
+
+    <group android:name="petal_2" android:pivotX="54" android:pivotY="54" android:rotation="144">
+        <path
+            android:strokeColor="#E295A5"
+            android:strokeWidth="0.8"
+            android:strokeLineJoin="round"
+            android:pathData="M 54,54 C 42,39 45,24 45,24 C 45,24 50,29 54,29 C 58,29 63,24 63,24 C 63,24 66,39 54,54 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="54"
+                    android:startY="54"
+                    android:endX="54"
+                    android:endY="24"
+                    android:type="linear">
+                    <item android:offset="0" android:color="#FFFAFB" />
+                    <item android:offset="0.6" android:color="#FFE1E5" />
+                    <item android:offset="1" android:color="#FFAFC0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+    </group>
+
+    <group android:name="petal_3" android:pivotX="54" android:pivotY="54" android:rotation="216">
+        <path
+            android:strokeColor="#E295A5"
+            android:strokeWidth="0.8"
+            android:strokeLineJoin="round"
+            android:pathData="M 54,54 C 42,39 45,24 45,24 C 45,24 50,29 54,29 C 58,29 63,24 63,24 C 63,24 66,39 54,54 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="54"
+                    android:startY="54"
+                    android:endX="54"
+                    android:endY="24"
+                    android:type="linear">
+                    <item android:offset="0" android:color="#FFFAFB" />
+                    <item android:offset="0.6" android:color="#FFE1E5" />
+                    <item android:offset="1" android:color="#FFAFC0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+    </group>
+
+    <group android:name="petal_4" android:pivotX="54" android:pivotY="54" android:rotation="288">
+        <path
+            android:strokeColor="#E295A5"
+            android:strokeWidth="0.8"
+            android:strokeLineJoin="round"
+            android:pathData="M 54,54 C 42,39 45,24 45,24 C 45,24 50,29 54,29 C 58,29 63,24 63,24 C 63,24 66,39 54,54 Z">
+            <aapt:attr name="android:fillColor">
+                <gradient
+                    android:startX="54"
+                    android:startY="54"
+                    android:endX="54"
+                    android:endY="24"
+                    android:type="linear">
+                    <item android:offset="0" android:color="#FFFAFB" />
+                    <item android:offset="0.6" android:color="#FFE1E5" />
+                    <item android:offset="1" android:color="#FFAFC0" />
+                </gradient>
+            </aapt:attr>
+        </path>
+    </group>
+
+    <!-- Super delicate pistils/stamens radiating from the center in gold and rose -->
+    <path android:strokeColor="#E5A44E" android:strokeWidth="0.75" android:strokeLineCap="round" android:pathData="M 54,54 L 54,45" />
+    <path android:fillColor="#E5A44E" android:pathData="M 54,43.2 a 1.0,1.0 0 1,1 0,2.0 a 1.0,1.0 0 1,1 0,-2.0" />
+
+    <path android:strokeColor="#E5A44E" android:strokeWidth="0.75" android:strokeLineCap="round" android:pathData="M 54,54 L 62,50.5" />
+    <path android:fillColor="#E5A44E" android:pathData="M 62.8,48.5 a 1.0,1.0 0 1,1 0,2.0 a 1.0,1.0 0 1,1 0,-2.0" />
+
+    <path android:strokeColor="#E5A44E" android:strokeWidth="0.75" android:strokeLineCap="round" android:pathData="M 54,54 L 59,62" />
+    <path android:fillColor="#E5A44E" android:pathData="M 59.8,61.8 a 1.0,1.0 0 1,1 0,2.0 a 1.0,1.0 0 1,1 0,-2.0" />
+
+    <path android:strokeColor="#E5A44E" android:strokeWidth="0.75" android:strokeLineCap="round" android:pathData="M 54,54 L 46,59" />
+    <path android:fillColor="#E5A44E" android:pathData="M 45,58.3 a 1.0,1.0 0 1,1 0,2.0 a 1.0,1.0 0 1,1 0,-2.0" />
+
+    <path android:strokeColor="#E5A44E" android:strokeWidth="0.75" android:strokeLineCap="round" android:pathData="M 54,54 L 46,48.5" />
+    <path android:fillColor="#E5A44E" android:pathData="M 45,46.8 a 1.0,1.0 0 1,1 0,2.0 a 1.0,1.0 0 1,1 0,-2.0" />
+
+    <!-- Center Soft Corona -->
+    <path android:fillColor="#FFF59D" android:pathData="M 54,50.5 a 3.5,3.5 0 1,1 0,7 a 3.5,3.5 0 1,1 0,-7" />
+    <path android:fillColor="#D05C72" android:pathData="M 54,52.2 a 1.8,1.8 0 1,1 0,3.6 a 1.8,1.8 0 1,1 0,-3.6" />
+
+    <!-- Delicate falling petals in the background to convey romance, wind and softness -->
+    <group android:name="falling_petal_1" android:pivotX="32" android:pivotY="72" android:rotation="45">
+        <path
+            android:fillColor="#FFE8EC"
+            android:strokeColor="#E295A5"
+            android:strokeWidth="0.5"
+            android:pathData="M 32,72 C 28,68 28,62 32,62 C 34,65 36,68 32,72 Z" />
+    </group>
+    
+    <group android:name="falling_petal_2" android:pivotX="78" android:pivotY="32" android:rotation="-15">
+        <path
+            android:fillColor="#FFF0F3"
+            android:strokeColor="#E9A6B5"
+            android:strokeWidth="0.5"
+            android:pathData="M 78,32 C 75,28 73,23 76,21 C 79,23 81,28 78,32 Z" />
+    </group>
+
+</vector>
