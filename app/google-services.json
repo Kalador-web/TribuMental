@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "139721727340",
+    "project_id": "device-streaming-7311289d",
+    "storage_bucket": "device-streaming-7311289d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:139721727340:android:76963fd372475a3a1ea749",
+        "android_client_info": {
+          "package_name": "com.aistudio.tribumental.amfeyo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIUUkfShd6xAmQHSrm3y4tGpVcBCfQKJA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "TribuMental",
+  "description": "Plataforma de acompañamiento emocional y organización médica para madres y embarazadas. Check-ins, calendario de citas, escaneo de documentos y comunidad WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
