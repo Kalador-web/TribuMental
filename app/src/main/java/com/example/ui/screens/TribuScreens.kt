@@ -1523,13 +1523,24 @@ fun AuthScreen(
 
                     OutlinedButton(
                         onClick = {
-                            val webClientId = context.getString(context.resources.getIdentifier("default_web_client_id", "string", context.packageName))
-                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                                .requestIdToken(webClientId)
-                                .requestEmail()
-                                .build()
-                            val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                            googleSignInLauncher.launch(googleSignInClient.signInIntent)
+                            try {
+                                val resId = context.resources.getIdentifier("default_web_client_id", "string", context.packageName)
+                                if (resId != 0) {
+                                    val webClientId = context.getString(resId)
+                                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                        .requestIdToken(webClientId)
+                                        .requestEmail()
+                                        .build()
+                                    val googleSignInClient = GoogleSignIn.getClient(context, gso)
+                                    googleSignInLauncher.launch(googleSignInClient.signInIntent)
+                                } else {
+                                    errorMessage = "Error: Google Sign-In no configurado en Firebase (Falta SHA-1)"
+                                    android.widget.Toast.makeText(context, "Falta configurar SHA-1 en la consola de Firebase", android.widget.Toast.LENGTH_LONG).show()
+                                }
+                            } catch (e: Exception) {
+                                Log.e("AuthScreen", "Error iniciando Google Sign-In", e)
+                                errorMessage = "Error técnico al iniciar sesión"
+                            }
                         },
                         border = BorderStroke(1.dp, SoftBorderPlum),
                         colors = ButtonDefaults.outlinedButtonColors(containerColor = Color.White),
