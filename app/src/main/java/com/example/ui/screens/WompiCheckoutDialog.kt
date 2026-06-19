@@ -14,7 +14,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+<<<<<<< HEAD
 import androidx.compose.ui.platform.LocalContext
+=======
+>>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -23,9 +26,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+<<<<<<< HEAD
 import androidx.browser.customtabs.CustomTabsIntent
 import android.net.Uri
 import android.content.Context
+=======
+>>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
 import com.example.ui.theme.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,6 +42,7 @@ val WompiPurple = Color(0xFF6F00FF)
 val WompiPurpleLight = Color(0xFFECF0FF)
 val WompiGrayBg = Color(0xFFF4F6F9)
 
+<<<<<<< HEAD
 /**
  * Función que abre la pasarela de pago real de Wompi usando Android Custom Tabs.
  */
@@ -60,6 +67,8 @@ fun abrirPasarelaPagoReal(context: Context, plan: String, emailUsuario: String) 
     intent.launchUrl(context, Uri.parse(urlWompi))
 }
 
+=======
+>>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
 @Composable
 fun WompiCheckoutDialog(
     planName: String,
@@ -96,7 +105,10 @@ fun WompiCheckoutDialog(
     var generatedTxId by remember { mutableStateOf("") }
 
     val coroutineScope = rememberCoroutineScope()
+<<<<<<< HEAD
     val context = LocalContext.current
+=======
+>>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
 
     val planPriceText = when (planName) {
         "MENSUAL" -> "$39.900 COP / mes"
@@ -491,11 +503,43 @@ fun WompiCheckoutDialog(
                         // Bottom Action Button
                         Button(
                             onClick = {
+<<<<<<< HEAD
+=======
+                                when (paymentMethod) {
+                                    "CARD" -> {
+                                        if (cardNumber.length < 13) {
+                                            errorMessage = "Número de tarjeta inválido."
+                                            return@Button
+                                        }
+                                        if (cardExpiry.isEmpty() || cardCvc.length < 3) {
+                                            errorMessage = "Verifica la expiración y código CVC."
+                                            return@Button
+                                        }
+                                        if (cardHolder.isEmpty()) {
+                                            errorMessage = "Nombre del titular requerido."
+                                            return@Button
+                                        }
+                                    }
+                                    "PSE" -> {
+                                        if (pseDocNum.isEmpty() || pseName.isEmpty()) {
+                                            errorMessage = "Por favor completa tu Documento y Nombre."
+                                            return@Button
+                                        }
+                                    }
+                                    "NEQUI" -> {
+                                        if (nequiPhone.length < 10) {
+                                            errorMessage = "Número de celular Nequi incompleto."
+                                            return@Button
+                                        }
+                                    }
+                                }
+>>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
                                 if (!acceptTerms) {
                                     errorMessage = "Debes aceptar los términos de la pasarela."
                                     return@Button
                                 }
 
+<<<<<<< HEAD
                                 // INTEGRACIÓN REAL: Abrir Pasarela Wompi en Custom Tab
                                 abrirPasarelaPagoReal(
                                     context = context,
@@ -503,6 +547,16 @@ fun WompiCheckoutDialog(
                                     emailUsuario = cardEmail.ifBlank { pseEmail.ifBlank { "usuario@tribumental.com" } }
                                 )
                                 onDismiss() // Cerramos el diálogo mientras el usuario paga en el navegador
+=======
+                                errorMessage = null
+                                generatedTxId = "wmp_tx_" + UUID.randomUUID().toString().take(12)
+                                checkoutStep = "PROCESSING"
+
+                                coroutineScope.launch {
+                                    delay(1800)
+                                    checkoutStep = "OTP"
+                                }
+>>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
                             },
                             colors = ButtonDefaults.buttonColors(containerColor = WompiPurple),
                             shape = RoundedCornerShape(12.dp),

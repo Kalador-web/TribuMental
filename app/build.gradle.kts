@@ -4,7 +4,10 @@ plugins {
   alias(libs.plugins.google.devtools.ksp)
   alias(libs.plugins.roborazzi)
   alias(libs.plugins.secrets)
+<<<<<<< HEAD
   alias(libs.plugins.google.services)
+=======
+>>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
 }
 
 android {
@@ -39,8 +42,9 @@ android {
 
   buildTypes {
     release {
+      isMinifyEnabled = true
+      isShrinkResources = true
       isCrunchPngs = false
-      isMinifyEnabled = false
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       signingConfig = signingConfigs.getByName("release")
     }
@@ -103,7 +107,10 @@ dependencies {
   implementation(libs.okhttp)
   // implementation(libs.play.services.location)
   implementation(libs.retrofit)
+<<<<<<< HEAD
   implementation("androidx.browser:browser:1.8.0")
+=======
+>>>>>>> d1242aa4b6f034d485b2b338743c91cab3206719
   testImplementation(libs.androidx.compose.ui.test.junit4)
   testImplementation(libs.androidx.core)
   testImplementation(libs.androidx.junit)
